@@ -1,0 +1,139 @@
+{% extends 'location/base.html' %}
+{% block content %}
+<style>
+  .voiture-detail {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+  }
+
+  .voiture-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .voiture-info p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .voiture-image {
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  .btn-reserver {
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .map-container iframe {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Styles pour la section Avis */
+  .avis-section {
+    margin-top: 3rem;
+  }
+  .avis-item {
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 0;
+  }
+  .avis-item:last-child {
+    border-bottom: none;
+  }
+  .avis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .avis-texte {
+    margin-bottom: 0.25rem;
+  }
+  .avis-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+  .avis-form textarea,
+  .avis-form input {
+    border-radius: 0.5rem;
+  }
+</style>
+
+<div class="container mt-4">
+  <div class="voiture-detail">
+    <h2 class="voiture-title">{{ voiture.marque }} {{ voiture.modele }}</h2>
+
+    <img src="{{ voiture.image.url }}" class="voiture-image" alt="Image de la voiture">
+
+    <div class="voiture-info">
+      <p><strong>Catégorie :</strong> {{ voiture.categorie }}</p>
+      <p><strong>Prix par jour :</strong> {{ voiture.prix_par_jour }} MAD</p>
+    </div>
+
+    <a href="{% url 'reserver_voiture' voiture.id %}" class="btn btn-success btn-reserver mb-4">Réserver</a>
+
+    {% if voiture.localisation %}
+      <h4>Localisation de la voiture</h4>
+      <div class="map-container my-3">
+        <iframe src="{{ voiture.localisation }}"
+                width="100%" height="400" style="border:0;" allowfullscreen=""
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    {% else %}
+      <p class="text-muted">Localisation non disponible.</p>
+    {% endif %}
+  </div>
+
+  <div class="avis-section">
+    <h4>Avis des clients</h4>
+
+    {% if avis_list %}
+      {% for avis in avis_list %}
+        <div class="avis-item">
+          <div class="avis-header">
+            <strong>{{ avis.client.username }}</strong>
+            <span class="badge bg-secondary">{{ avis.note }}/5</span>
+          </div>
+          <p class="avis-texte">{{ avis.texte }}</p>
+          <div class="avis-date">{{ avis.date|date:"d/m/Y H:i" }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">Pas encore d’avis pour cette voiture.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <h5 class="mt-4">Laissez votre avis</h5>
+      <form method="post" class="avis-form mb-5">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.texte.label_tag }}
+          {{ form.texte }}
+          {{ form.texte.errors }}
+        </div>
+        <div class="mb-3">
+          {{ form.note.label_tag }}
+          {{ form.note }}
+          {{ form.note.errors }}
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Envoyer</button>
+      </form>
+    {% else %}
+      <p class="text-center">
+        <a href="{% url 'login' %}">Connectez‑vous</a> pour laisser un avis.
+      </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

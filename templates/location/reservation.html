@@ -1,0 +1,28 @@
+{% extends 'location/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2>Réserver : {{ voiture.marque }} {{ voiture.modele }}</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="date_debut" class="form-label">Date de début</label>
+      <input type="date" class="form-control" name="date_debut" required>
+    </div>
+    <div class="mb-3">
+      <label for="date_fin" class="form-label">Date de fin</label>
+      <input type="date" class="form-control" name="date_fin" required>
+    </div>
+    <button type="submit" class="btn btn-success">Réserver</button>
+  </form>
+</div>
+
+{% endblock %}

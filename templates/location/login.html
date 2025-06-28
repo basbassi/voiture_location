@@ -1,0 +1,83 @@
+{% extends "location/base1.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<style>
+  .auth-card {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    background: white;
+  }
+
+  .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    border-color: #0d6efd;
+  }
+
+  .form-label {
+    font-weight: 500;
+  }
+
+  .auth-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-switch {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .auth-switch a {
+    color: #0d6efd;
+    text-decoration: none;
+  }
+
+  .auth-switch a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="auth-card">
+        <h3 class="auth-title">Connexion</h3>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur :</label>
+            <input type="text" name="username" id="username" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe :</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Se connecter</button>
+          </div>
+        </form>
+
+        {% if messages %}
+          <div class="mt-3">
+            {% for message in messages %}
+              <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="auth-switch">
+          <p>Vous n'avez pas encore de compte ? <a href="{% url 'signup' %}">Créer un compte</a></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'location/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Paiement pour {{ reservation.voiture.marque }} {{ reservation.voiture.modele }}</h2>
+  <p>Montant à payer : <strong>{{ reservation.montant_total }} MAD</strong></p>
+  
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="mode_paiement" class="form-label">Mode de paiement</label>
+      <select name="mode_paiement" class="form-control" required>
+        <option value="Carte bancaire">Carte bancaire</option>
+        <option value="Espèces">Espèces</option>
+        <option value="Virement">Virement</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Payer</button>
+  </form>
+</div>
+{% endblock %}

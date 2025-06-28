@@ -1,0 +1,107 @@
+{% extends 'location/base.html' %}
+
+{% block content %}
+<style>
+  .historique-container {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+  }
+
+  .historique-container h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  .table {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .table th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+  }
+
+  .table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-warning {
+    background-color: #f0ad4e;
+    border: none;
+  }
+
+  .btn-warning:hover {
+    background-color: #ec971f;
+  }
+
+  .btn-danger:hover {
+    background-color: #c9302c;
+  }
+
+  p {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+  }
+</style>
+
+<div class="container historique-container">
+  <h2>Mon historique de réservations</h2>
+
+  {% if reservations %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Voiture</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+            <th>Montant total</th>
+            <th>Statut</th>
+            <th>Supprimer</th>
+            <th>Modifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reservation in reservations %}
+            <tr>
+              <td>{{ reservation.voiture.marque }} {{ reservation.voiture.modele }}</td>
+              <td>{{ reservation.date_debut }}</td>
+              <td>{{ reservation.date_fin }}</td>
+              <td>{{ reservation.montant_total }} MAD</td>
+              <td>{{ reservation.statut }}</td>
+              <td>
+                <a href="{% url 'supprimer_reservation' reservation.id %}" class="btn btn-danger btn-sm">
+                  Supprimer
+                </a>
+              </td>
+              <td>
+                <a href="{% url 'modifier_reservation' reservation.id %}" class="btn btn-warning btn-sm">
+                  Modifier
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>Aucune réservation trouvée.</p>
+  {% endif %}
+</div>
+{% endblock %}

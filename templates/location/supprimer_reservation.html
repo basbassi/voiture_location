@@ -1,0 +1,12 @@
+{% extends 'location/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Supprimer la Réservation</h2>
+  <p>Êtes-vous sûr de vouloir supprimer la réservation de la voiture <strong>{{ reservation.voiture }}</strong> du <strong>{{ reservation.date_debut }}</strong> au <strong>{{ reservation.date_fin }}</strong> ?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+    <a href="{% url 'historique_reservations' %}" class="btn btn-secondary">Annuler</a>
+  </form>
+</div>
+{% endblock %}

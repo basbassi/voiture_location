@@ -1,0 +1,88 @@
+{% extends 'location/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .filter-bar {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+</style>
+
+<div class="container mt-4">
+  <div class="text-center">
+<img class="text-center" src="{% static 'images/cars.png' %}" alt="Logo" style="height: 70px; width: auto;">  
+   
+  </div>
+   
+<h2 >Voitures disponibles</h2>
+
+  <!-- Barre de filtre -->
+  <form method="get" class="filter-bar">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-10">
+        <select name="marque" class="form-select">
+          <option value="">Toutes les marques</option>
+          {% for marque in marques %}
+            <option value="{{ marque }}" {% if marque == marque_selectionnee %}selected{% endif %}>
+              {{ marque }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2 text-end">
+        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Cartes des voitures -->
+  <div class="row">
+    {% for voiture in voitures %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="{{ voiture.image.url }}" class="card-img-top" alt="{{ voiture.marque }} {{ voiture.modele }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ voiture.marque }} {{ voiture.modele }}</h5>
+            <p class="card-text">{{ voiture.prix_par_jour }} MAD / jour</p>
+            <a href="{% url 'voiture_detail' voiture.id %}" class="btn btn-outline-primary">Détails</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <p class="text-center text-muted">Aucune voiture trouvée pour cette marque.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
